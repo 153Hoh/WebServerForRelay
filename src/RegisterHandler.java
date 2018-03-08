@@ -27,7 +27,7 @@ public class RegisterHandler implements HttpHandler {
             String id = getSaltString();
             String ip = (String) parameters.get("ip");
             String deviceType = (String) parameters.get("devicetype");
-            Main.addDevice(new Device(id, ip, deviceType));
+            Main.addDevice(new Device(id, ip, deviceType, true));
             response = "id:" + id;
             he.sendResponseHeaders(200, response.length());
             os.write(response.getBytes());

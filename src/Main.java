@@ -38,7 +38,7 @@ public class Main {
         if (server != null) {
             System.out.println("Server started at " + SERVER_IP + ":" + SERVER_PORT);
             server.createContext("/", new RootHandler());
-            server.createContext("/echoGet", new EchoGetHandler());
+            server.createContext("/Ping", new PingHandler());
             server.createContext("/Register", new RegisterHandler());
             server.setExecutor(null);
             server.start();
@@ -70,6 +70,10 @@ public class Main {
 
     public static void addDevice(Device device){
         devices.add(device);
+    }
+
+    public static List<Device> getDevices(){
+        return devices;
     }
 
     public static int SelectCommand(String menuTitle, String[] menu) throws IOException{
