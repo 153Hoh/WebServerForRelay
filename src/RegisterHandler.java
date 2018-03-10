@@ -14,7 +14,7 @@ public class RegisterHandler implements HttpHandler {
     @Override
 
     public void handle(HttpExchange he) throws IOException {
-        // parse request
+        System.out.println("RegisterHandler-start");
         Map<String, Object> parameters = new HashMap<>();
         OutputStream os = he.getResponseBody();
         String response = "";
@@ -37,6 +37,7 @@ public class RegisterHandler implements HttpHandler {
             os.write(response.getBytes());
             os.close();
         }
+        System.out.println("RegisterHandler-end");
     }
 
     private String getSaltString() {

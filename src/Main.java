@@ -1,15 +1,17 @@
 import com.sun.net.httpserver.HttpServer;
 
 import java.io.*;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.URLDecoder;
+import java.net.UnknownHostException;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Main {
 
-    private final static String SERVER_IP = "192.168.6.16";
+    private static String SERVER_IP;
     private final static int SERVER_PORT = 9000;
 
     static List<Device> devices;
@@ -25,6 +27,11 @@ public class Main {
     }
 
     private void init(){
+        try {
+            SERVER_IP = InetAddress.getAllByName("153Hoh")[1].getHostAddress();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
         devices = new ArrayList<>();
     }
 
@@ -38,6 +45,7 @@ public class Main {
         if (server != null) {
             System.out.println("Server started at " + SERVER_IP + ":" + SERVER_PORT);
             server.createContext("/", new RootHandler());
+            server.createContext("/asd", new EchoHeaderHandler());
             server.createContext("/Ping", new PingHandler());
             server.createContext("/Register", new RegisterHandler());
             server.setExecutor(null);
@@ -46,7 +54,7 @@ public class Main {
             System.out.println("Server start failed!");
         }
 
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        /*ExecutorService executorService = Executors.newSingleThreadExecutor();
         executorService.execute(() -> {
             try {
                 boolean finished = false;
@@ -65,7 +73,7 @@ public class Main {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        });
+        });*/
     }
 
     public static void addDevice(Device device){
