@@ -4,12 +4,14 @@ public class Device {
     private String DeviceIp;
     private String DeviceType;
     private boolean isOnline;
+    private String Action;
 
-    public Device(String deviceId, String deviceIp, String deviceType, boolean isOnline) {
+    public Device(String deviceId, String deviceIp, String deviceType, boolean isOnline, String action) {
         DeviceId = deviceId;
         DeviceIp = deviceIp;
         DeviceType = deviceType;
         this.isOnline = isOnline;
+        Action = action;
     }
 
     public String getDeviceId() {
@@ -30,5 +32,13 @@ public class Device {
 
     public boolean getIsOnline(){
         return isOnline;
+    }
+
+    public String getAction() {
+        return Action;
+    }
+
+    public void setAction(String action) {
+        Action = action;
     }
 }

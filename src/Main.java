@@ -14,7 +14,8 @@ public class Main {
     private static String SERVER_IP;
     private final static int SERVER_PORT = 9000;
 
-    static List<Device> devices;
+    static List<Device> unregisteredDevices;
+    static List<User> users;
 
     static final String[] MAIN_MENU = new String[]{ "1. igen",
                                                     "2: Órarend megtekintés",
@@ -32,7 +33,8 @@ public class Main {
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
-        devices = new ArrayList<>();
+        unregisteredDevices = new ArrayList<>();
+        users = new ArrayList<>();
     }
 
     private void service() {
@@ -48,6 +50,9 @@ public class Main {
             server.createContext("/asd", new EchoHeaderHandler());
             server.createContext("/Ping", new PingHandler());
             server.createContext("/Register", new RegisterHandler());
+            server.createContext("/Poll", new PollHandler());
+            server.createContext("/GetData", new GetDataHandler());
+            server.createContext("/SendCommandToDevice", new SendCommandHandler());
             server.setExecutor(null);
             server.start();
         } else {
@@ -62,12 +67,19 @@ public class Main {
                     int cmd = SelectCommand("Fő menű:", MAIN_MENU);
                     switch(cmd){
                         case 1:
-                            for(Device d:devices){
+                            for(Device d: unregisteredDevices){
                                 System.out.println(d.getDeviceId() + ":" + d.getDeviceIp() + ":" + d.getDeviceType());
                             }
                             break;
-                        case 2: break;
-                        case 3: finished = true;
+                        case 2:
+                            unregisteredDevices.get(0).setAction("relayOn");
+                            System.out.println(unregisteredDevices.get(0).getDeviceId() + ":" + unregisteredDevices.get(0).getAction());
+                            break;
+                        case 3:
+                            unregisteredDevices.get(0).setAction("relayOff");
+                            System.out.println(unregisteredDevices.get(0).getDeviceId() + ":" + unregisteredDevices.get(0).getAction());
+                            break;
+                        case 4: finished = true;
                     }
                 }
             } catch (IOException e) {
@@ -77,11 +89,19 @@ public class Main {
     }
 
     public static void addDevice(Device device){
-        devices.add(device);
+        unregisteredDevices.add(device);
     }
 
-    public static List<Device> getDevices(){
-        return devices;
+    public static void addUsers(User u){
+        users.add(u);
+    }
+
+    public static List<Device> getUnregisteredDevices(){
+        return unregisteredDevices;
+    }
+
+    public static List<User> getUsers(){
+        return users;
     }
 
     public static int SelectCommand(String menuTitle, String[] menu) throws IOException{

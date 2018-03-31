@@ -20,7 +20,7 @@ public class PingHandler implements HttpHandler {
         Main.parseQuery(query, parameters);
         if(parameters.containsKey("id")){
             String id = (String) parameters.get("id");
-            for(Device d:Main.getDevices()){
+            for(Device d:Main.getUnregisteredDevices()){
                 if(d.getDeviceId().equalsIgnoreCase(id)){
                     d.setIsOnline(true);
                     response = "ok";
